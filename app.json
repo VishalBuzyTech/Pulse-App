@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "android": {
+      "permissions": [
+        "INTERNET",
+        "READ_PHONE_STATE",
+        "CALL_PHONE"
+      ],
+      "adaptiveIcon": {
+        "foregroundImage": "",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.vishal_tiwari.Yhataw_Native",
+      "newArchEnabled": true
+    },
+    "name": "Yhataw_Native",
+    "slug": "pulse",
+    "version": "1.0.2",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/pulse_logo12.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "newArchEnabled": true
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9cdafe01-9aef-42fe-a8bb-8971ef932bc0"
+      }
+    },
+    "plugins": [
+      "expo-font"
+    ],
+    "owner": "vishalbuzytech"
+  }
+}
