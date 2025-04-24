@@ -167,6 +167,8 @@ const AllTeamList = () => {
                 status={item?.userOffices?.length ? item?.userOffices[0]?.teamRoleName : item?.userOffices?.teamRoleName}
                 form_name={item?.email ?? ""}
                 dateTimeShow=""
+                priority=""
+                reminder=""
                 onCallPress={() => console.log("Call Pressed", item?.user_name)}
                 onMorePress={() =>
                   console.log("More Options Pressed", item.user_name)

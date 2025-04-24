@@ -9,6 +9,7 @@ import {
   TextInput,
   Platform,
   ScrollView,
+  Modal,
 } from "react-native";
 import Animated, {
   useSharedValue,
@@ -23,7 +24,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useSelector } from "react-redux";
 import { getRemark, saveRemark } from "./RemiderServices";
 import { globalStyles } from "../../GlobalCss/GlobalStyles";
-import Icon from 'react-native-vector-icons/Ionicons'; 
+import Icon from "react-native-vector-icons/Ionicons";
 
 interface RemarkPop {
   visible: boolean;
@@ -34,9 +35,21 @@ interface RemarkPop {
 
 const { height: screenHeight } = Dimensions.get("window");
 
-const RemarkPop: React.FC<RemarkPop> = ({ visible, onClose, onSubmit,selectedCardDataShow }) => {
+const RemarkPop: React.FC<RemarkPop> = ({
+  visible,
+  onClose,
+  onSubmit,
+  selectedCardDataShow,
+}) => {
   const translateY = useSharedValue(visible ? 0 : screenHeight);
-  const { leadData,myLeadData,myLeadProspectShow,myLeadOpportunity ,myLeadClosure,teamLeadData} = useSelector((state: RootState) => state.auth);
+  const {
+    leadData,
+    myLeadData,
+    myLeadProspectShow,
+    myLeadOpportunity,
+    myLeadClosure,
+    teamLeadData,
+  } = useSelector((state: RootState) => state.auth);
   const [title, setTitle] = useState("");
   const [note, setNote] = useState("");
   const [date, setDate] = useState(new Date());
@@ -45,7 +58,6 @@ const RemarkPop: React.FC<RemarkPop> = ({ visible, onClose, onSubmit,selectedCar
   const [newRemark, setNewRemak] = useState([]);
   const inputRef = useRef<TextInput>(null);
   const userId = store.getState().auth.userId;
-  
 
   useEffect(() => {
     if (visible) {
@@ -70,7 +82,7 @@ const RemarkPop: React.FC<RemarkPop> = ({ visible, onClose, onSubmit,selectedCar
 
   const submitRemark = async () => {
     let leadIdDynamic = "";
-  
+
     switch (selectedCardDataShow) {
       case 1:
         leadIdDynamic = leadData?._id;
@@ -86,32 +98,38 @@ const RemarkPop: React.FC<RemarkPop> = ({ visible, onClose, onSubmit,selectedCar
         break;
       case 6:
         leadIdDynamic = myLeadClosure?._id;
-        break; 
+        break;
       case 7:
         leadIdDynamic = teamLeadData?._id;
         break;
       default:
-        console.warn("Invalid selectedCardDataShow value:", selectedCardDataShow);
+        console.warn(
+          "Invalid selectedCardDataShow value:",
+          selectedCardDataShow
+        );
         return;
     }
-  
+
     if (!leadIdDynamic) {
-      console.warn("Lead ID not found for selectedCardDataShow:", selectedCardDataShow);
+      console.warn(
+        "Lead ID not found for selectedCardDataShow:",
+        selectedCardDataShow
+      );
       return;
     }
-  
+
     const body = {
-      leadId: leadIdDynamic, 
+      leadId: leadIdDynamic,
       userId,
       title,
       notes: note,
       date: new Date().toLocaleDateString(),
       time: new Date().toLocaleTimeString(),
     };
-  
+
     try {
       const newRemark = await saveRemark(body);
-      const response = await getRemark(leadIdDynamic); 
+      const response = await getRemark(leadIdDynamic);
       setNewRemak(response.data);
       onSubmit(newRemark);
       onClose();
@@ -119,7 +137,6 @@ const RemarkPop: React.FC<RemarkPop> = ({ visible, onClose, onSubmit,selectedCar
       console.error("Error saving remark:", error);
     }
   };
-  
 
   const onChange = (date: Date) => {
     setDate(date);
@@ -147,73 +164,85 @@ const RemarkPop: React.FC<RemarkPop> = ({ visible, onClose, onSubmit,selectedCar
   return (
     <>
       {visible && (
-        <BlurView intensity={200} style={styles.blurView}>
-          <TouchableOpacity style={styles.overlay} onPress={onClose}>
-            <Animated.View style={[styles.container, animatedStyle]}>
-              <TouchableOpacity activeOpacity={1} style={styles.modalContent}>
-              <TouchableOpacity onPress={onClose} style={styles.closeIcon}>
-    <Icon name="close" size={24} color="#000" />
-  </TouchableOpacity>
-                <ScrollView contentContainerStyle={styles.scrollContent}>
-                  <View style={styles.containerdiv}>
-                    <Text
-                      style={[globalStyles.h4, globalStyles.fs1, styles.header]}
-                      allowFontScaling={false}
-                    >
-                      Add Note
-                    </Text>
-                    <Text
-                      style={[globalStyles.h8, globalStyles.fs1, styles.header]}
-                      allowFontScaling={false}
-                    >
-                      Note : Notes help you remember important details about
-                      your leads
-                    </Text>
-                    <View style={styles.inputContainer}>
+        <Modal animationType="fade" transparent={true}   onRequestClose={() => onClose}>
+          <BlurView
+            style={styles.blurView}>
+            <TouchableOpacity style={styles.overlay} onPress={onClose}>
+              <Animated.View style={[styles.container, animatedStyle]}>
+                <TouchableOpacity activeOpacity={1} style={styles.modalContent}>
+                  <TouchableOpacity onPress={onClose} style={styles.closeIcon}>
+                    <Icon name="close" size={24} color="#fff" />
+                  </TouchableOpacity>
+                  <ScrollView contentContainerStyle={styles.scrollContent}>
+                    <View style={styles.containerdiv}>
                       <Text
                         style={[
-                          globalStyles.h7,
+                          globalStyles.h4,
                           globalStyles.fs1,
                           styles.header,
                         ]}
                         allowFontScaling={false}
                       >
-                        Note
+                        Add Note
                       </Text>
-                      {show && <TouchableOpacity
-                        style={styles.inputWithIconContainer}
-                        activeOpacity={0.8}
-                        onPress={() => inputRef.current?.focus()}
+                      <Text
+                        style={[
+                          globalStyles.h8,
+                          globalStyles.fs1,
+                          styles.header,
+                        ]}
+                        allowFontScaling={false}
                       >
-                        <View style={styles.inputWithIconContainer}>
-                          <TextInput
-                            // ref={inputRef}
-                            style={[
-                              styles.inputValue,
-                              globalStyles.h7,
-                              { height: 80 },
-                            ]}
-                            multiline={true}
-                            placeholder="Enter Note"
-                            value={note}
-                            onChangeText={setNote}
-                          />
-                        </View>
-                      </TouchableOpacity>}
-                      
+                        Note : Notes help you remember important details about
+                        your leads
+                      </Text>
+                      <View style={styles.inputContainer}>
+                        <Text
+                          style={[
+                            globalStyles.h7,
+                            globalStyles.fs1,
+                            styles.header,
+                          ]}
+                          allowFontScaling={false}
+                        >
+                          Note
+                        </Text>
+                        {show && (
+                          <TouchableOpacity
+                            style={styles.inputWithIconContainer}
+                            activeOpacity={0.8}
+                            onPress={() => inputRef.current?.focus()}
+                          >
+                            <View style={styles.inputWithIconContainer}>
+                              <TextInput
+                                // ref={inputRef}
+                                style={[
+                                  styles.inputValue,
+                                  globalStyles.h7,
+                                  { height: 80 },
+                                ]}
+                                multiline={true}
+                                placeholder="Enter Note"
+                                value={note}
+                                onChangeText={setNote}
+                              />
+                            </View>
+                          </TouchableOpacity>
+                        )}
+                      </View>
                     </View>
-                  </View>
-                  <TouchableOpacity
-                    style={styles.submitButton}
-                    onPress={submitRemark}
-                  >
-                    <Text style={styles.submitButtonText}>Submit</Text>
-                  </TouchableOpacity>
-                </ScrollView>
-              </TouchableOpacity>
-            </Animated.View>
-          </TouchableOpacity>
-        </BlurView>
+                    <TouchableOpacity
+                      style={styles.submitButton}
+                      onPress={submitRemark}
+                    >
+                      <Text style={styles.submitButtonText}>Submit</Text>
+                    </TouchableOpacity>
+                  </ScrollView>
+                </TouchableOpacity>
+              </Animated.View>
+            </TouchableOpacity>
+          </BlurView>
+        </Modal>
       )}
     </>
   );
@@ -225,10 +254,12 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0,
+    zIndex: 99999,
     right: 0,
     bottom: 0,
     justifyContent: "flex-end",
     alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.66)"
   },
   overlay: {
     flex: 1,
@@ -240,8 +271,8 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "50%",
     backgroundColor: "white",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
     elevation: 5,
   },
   modalContent: {
@@ -308,13 +339,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   closeIcon: {
-    position: 'absolute',
-    top: -20,
-    alignSelf: 'center',
-    zIndex: 10,
-    padding: 8,
-    backgroundColor: '#fff',
-    borderRadius: 20,
+    position: "absolute",
+    top: -90,
+    alignSelf: "center",
+    zIndex: 999,
+    padding: 16,
+    backgroundColor: "#000",
+    borderRadius: 50,
     elevation: 3,
   },
 });

@@ -83,7 +83,7 @@ const NotificationsScreen = () => {
         console.error("Error updating notification status:", error);
       }
     }
-    navigation.navigate("LeadInfoScreen", { selectedCard :notification });
+    // navigation.navigate("LeadInfoScreen", { selectedCard :notification });
   };
 
   const formatTimeAgo = (createdAt: string) => {

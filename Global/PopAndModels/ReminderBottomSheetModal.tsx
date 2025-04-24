@@ -9,6 +9,7 @@ import {
   TextInput,
   Platform,
   ScrollView,
+  Modal,
 } from "react-native";
 import Animated, {
   useSharedValue,
@@ -163,13 +164,15 @@ const ReminderBottomSheetModal: React.FC<ReminderBottomSheetModalProps> = ({
 
   return (
     <>
+   
       {visible && (
-        <BlurView intensity={200} style={styles.blurView}>
+         <Modal animationType="fade" transparent={true}   onRequestClose={() => onClose}>
+        <BlurView style={styles.blurView}>
           <TouchableOpacity style={styles.overlay} onPress={onClose}>
             <Animated.View style={[styles.container, animatedStyle]}>
               <TouchableOpacity activeOpacity={1} style={styles.modalContent}>
                            <TouchableOpacity onPress={onClose} style={styles.closeIcon}>
-                    <Icon name="close" size={24} color="#000" />
+                    <Icon name="close" size={24} color="#fff" />
                   </TouchableOpacity>
                 <ScrollView contentContainerStyle={styles.scrollContent}>
                   <View style={styles.containerdiv}>
@@ -312,6 +315,7 @@ const ReminderBottomSheetModal: React.FC<ReminderBottomSheetModalProps> = ({
             </Animated.View>
           </TouchableOpacity>
         </BlurView>
+         </Modal>
       )}
     </>
   );
@@ -327,6 +331,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: "flex-end",
     alignItems: "center",
+      backgroundColor: "rgba(0, 0, 0, 0.66)"
   },
   overlay: {
     flex: 1,
@@ -406,13 +411,13 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   closeIcon: {
-    position: 'absolute',
-    top: -20,
-    alignSelf: 'center',
-    zIndex: 10,
-    padding: 8,
-    backgroundColor: '#fff',
-    borderRadius: 20,
+    position: "absolute",
+    top: -90,
+    alignSelf: "center",
+    zIndex: 999,
+    padding: 16,
+    backgroundColor: "#000",
+    borderRadius: 50,
     elevation: 3,
   },
 });

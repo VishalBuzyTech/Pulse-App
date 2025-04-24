@@ -578,50 +578,65 @@ const LeadInfoScreen = () => {
                 </View>
               </>
             ) : null}
-            {selectedCardDataShow === 2 ||
-            selectedCardDataShow === 3 ||
-            selectedCardDataShow === 1 ||
-            selectedCardDataShow === 5 ||
-            selectedCardDataShow === 4 ||
-            selectedCardDataShow === 7 ? (
-              <View>
-                <Text
-                  style={[
-                    globalStyles.h7,
-                    globalStyles.fontfm,
-                    styles.dropdownText,
-                  ]}
-                  allowFontScaling={false}
-                >
-                  Status
-                </Text>
-                <TouchableOpacity
-                  style={[styles.dropdown]}
-                  onPress={() => handleStatusSelect("")}
-                >
-                  <Text
-                    style={[
-                      globalStyles.h7,
-                      globalStyles.fontfm,
-                      globalStyles.tc,
-                    ]}
-                    allowFontScaling={false}
-                  >
-                    {selectedStatus || "Select Status"}
-                  </Text>
-                  <Icon
-                    name="chevron-down-outline"
-                    size={24}
-                    style={[
-                      styles.dropdownIcon,
-                      openDropdown === 3 && styles.dropdownIconOpen,
-                    ]}
-                  />
-                </TouchableOpacity>
-              </View>
-            ) : (
-              ""
-            )}
+            {(() => {
+              const selectedLeadData =
+                selectedCardDataShow === 1
+                  ? leadData
+                  : selectedCardDataShow === 2
+                  ? allContectMy
+                  : selectedCardDataShow === 3
+                  ? myLeadData
+                  : selectedCardDataShow === 4
+                  ? myLeadProspectShow
+                  : selectedCardDataShow === 5
+                  ? myLeadOpportunity
+                  : selectedCardDataShow === 7
+                  ? mySatgeDataRedux
+                  : {};
+
+              if ([1, 2, 3, 4, 5, 7].includes(selectedCardDataShow)) {
+                return (
+                  <View>
+                    <Text
+                      style={[
+                        globalStyles.h7,
+                        globalStyles.fontfm,
+                        styles.dropdownText,
+                      ]}
+                      allowFontScaling={false}
+                    >
+                      Status
+                    </Text>
+                    <TouchableOpacity
+                      style={[styles.dropdown]}
+                      onPress={() => handleStatusSelect("")}
+                    >
+                      <Text
+                        style={[
+                          globalStyles.h7,
+                          globalStyles.fontfm,
+                          globalStyles.tc,
+                        ]}
+                        allowFontScaling={false}
+                      >
+                        {selectedStatus ||
+                          selectedLeadData?.stage}
+                      </Text>
+                      <Icon
+                        name="chevron-down-outline"
+                        size={24}
+                        style={[
+                          styles.dropdownIcon,
+                          openDropdown === 3 && styles.dropdownIconOpen,
+                        ]}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                );
+              }
+
+              return null;
+            })()}
           </View>
         )}
 
@@ -1112,6 +1127,7 @@ const LeadInfoScreen = () => {
         visible={isModalVisible}
         onClose={() => setModalVisible(false)}
         onStatusSelect={handleStatusSelect}
+        selectedCardDataShow={selectedCardDataShow}
       />
       <ReminderBottomSheetModal
         visible={rminderisVisible}
@@ -1149,7 +1165,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     // marginBottom: 20,
-    padding :15
+    padding: 15,
   },
   headerLeft: {
     flexDirection: "column",
