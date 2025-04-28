@@ -193,8 +193,8 @@ const StatusPop: React.FC<StatusPopProps> = ({
                         >
                           <Text
                             style={[
-                              globalStyles.h7,
-                              globalStyles.fontfm,
+                              globalStyles.h5,
+                              globalStyles.fs2,
                               styles.dropdownItem,
                             ]}
                             allowFontScaling={false}

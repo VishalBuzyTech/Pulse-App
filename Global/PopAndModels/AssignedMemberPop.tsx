@@ -18,6 +18,7 @@ import { RootState } from "../../utils/store";
 import { globalStyles } from "../../GlobalCss/GlobalStyles";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { Checkbox } from "react-native-paper";
 
 interface AssignedMemberPopProps {
   visible: boolean;
@@ -34,14 +35,23 @@ const AssignedMemberPop: React.FC<AssignedMemberPopProps> = ({
 }) => {
   const [userData, setUserData] = useState<any[]>([]);
   const { leadData } = useSelector((state: RootState) => state.auth);
-  const assignToIds = useMemo(() => leadData.AssignTo.map((item) => item._id), [leadData]);
+  const assignToIds = useMemo(
+    () => leadData.AssignTo.map((item) => item._id),
+    [leadData]
+  );
 
   const scale = useSharedValue(visible ? 1 : 0.8);
   const opacity = useSharedValue(visible ? 1 : 0);
 
   useEffect(() => {
-    scale.value = withSpring(visible ? 1 : 0.8, { damping: 20, stiffness: 150 });
-    opacity.value = withSpring(visible ? 1 : 0, { damping: 20, stiffness: 150 });
+    scale.value = withSpring(visible ? 1 : 0.8, {
+      damping: 20,
+      stiffness: 150,
+    });
+    opacity.value = withSpring(visible ? 1 : 0, {
+      damping: 20,
+      stiffness: 150,
+    });
 
     if (visible && leadData?._id) {
       fetchMemberLeadStage(assignToIds, leadData._id);
@@ -65,7 +75,10 @@ const AssignedMemberPop: React.FC<AssignedMemberPopProps> = ({
             checked: member.is_available === 1,
           }))
         )
-        .filter((member, index, self) => self.findIndex((m) => m._id === member._id) === index); 
+        .filter(
+          (member, index, self) =>
+            self.findIndex((m) => m._id === member._id) === index
+        );
 
       setUserData(members);
     } catch (error) {
@@ -93,19 +106,40 @@ const AssignedMemberPop: React.FC<AssignedMemberPopProps> = ({
 
   return (
     visible && (
-      <TouchableOpacity style={styles.overlay} onPress={onClose} activeOpacity={1}>
+      <TouchableOpacity
+        style={styles.overlay}
+        onPress={onClose}
+        activeOpacity={1}
+      >
         <BlurView style={styles.blurView} intensity={200}>
           <Animated.View style={[styles.modal, animatedStyle]}>
-            <ScrollView style={styles.scrollView} keyboardShouldPersistTaps="handled">
+            <ScrollView
+              style={styles.scrollView}
+              keyboardShouldPersistTaps="handled"
+            >
               {userData.map((item) => (
-                <TouchableOpacity key={item._id} style={styles.checkboxItem} onPress={() => toggleCheckbox(item._id)}>
+                <TouchableOpacity
+                  key={item._id}
+                  style={styles.checkboxItem}
+                  onPress={() => toggleCheckbox(item._id)}
+                >
                   <View style={styles.checkboxContainer}>
-                    {item.checked ? (
-                      <MaterialCommunityIcons name="checkbox-marked" size={24} color="#3D48E5" />
-                    ) : (
-                      <MaterialIcons name="check-box-outline-blank" size={24} color="#565F6C" />
-                    )}
-                    <Text style={[globalStyles.h5, globalStyles.fontfm, styles.text, { color: item.checked ? "#3D48E5" : "#565F6C" }]}>
+                    <View style={{ transform: [{ scale: 0.7 }] }}>
+                      <Checkbox
+                        status={item.checked ? "checked" : "unchecked"}
+                        onPress={() => toggleCheckbox(item._id)}
+                        color="#3F8CFF"
+                        uncheckedColor="#A0A0A0"
+                      />
+                    </View>
+                    <Text
+                      style={[
+                        globalStyles.h5,
+                        globalStyles.fs2,
+                        styles.text,
+                        { color: item.checked ? "#3D48E5" : "#565F6C" },
+                      ]}
+                    >
                       {item.name}
                     </Text>
                   </View>

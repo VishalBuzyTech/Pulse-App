@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../utils/store";
 import { getTeamList } from "../../Components/Screens/DashboardService";
 import { globalStyles } from "../../GlobalCss/GlobalStyles";
+import { Checkbox } from "react-native-paper";
 
 interface MemberPopOverProps {
   visible: boolean;
@@ -88,15 +89,17 @@ const MemberPopOver: React.FC<MemberPopOverProps> = ({
     <View key={item.id || `${item.team_name}_${Math.random()}`} style={{ paddingLeft: level * 20 }}>
       <TouchableOpacity style={styles.checkboxItem}>
         <View style={styles.checkboxContainer}>
-          {item.checked ? (
-            <MaterialCommunityIcons name="checkbox-marked" size={24} color="#3D48E5" />
-          ) : (
-            <MaterialIcons name="check-box-outline-blank" size={24} color="#565F6C" />
-          )}
+          <View style={{ transform: [{ scale: 0.7 }] }}>
+            <Checkbox
+              status={item.checked ? 'checked' : 'unchecked'}
+              color="#3F8CFF"
+              uncheckedColor="#A0A0A0"
+            />
+          </View>
           <Text
             style={[
               globalStyles.h5,
-              globalStyles.fontfm,
+              globalStyles.fs2,
               styles.checkboxText,
               { color: item.checked ? "#3D48E5" : "#565F6C" },
             ]}
@@ -153,7 +156,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   checkboxItem: {
-    paddingVertical: 10,
+    // paddingVertical: 10,
     paddingHorizontal: 15,
   },
   checkboxContainer: {
