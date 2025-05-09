@@ -40,6 +40,7 @@ const AddLeadManual = () => {
     phone: "",
     stage: "",
     source: "",
+    member: "",
   });
   const [teams, setTeams] = useState<any>([]);
   const [value, setValue] = useState(selectedForm);
@@ -58,6 +59,7 @@ const AddLeadManual = () => {
     name: "",
     email: "",
     phone: "",
+    member: "",
   });
   const [selectedTeamsText, setSelectedTeamsText] = useState<any>([]);
   const [selectedNamesUser, setselectedNamesUser] = useState<any>([]);
@@ -149,7 +151,22 @@ const AddLeadManual = () => {
     setModalVisible(false);
   };
   const closeMemberModal = () => setMemberModalVisible(false);
-  const openMemberModal = () => setMemberModalVisible(true);
+
+  const openMemberModal = () => {
+    if (selectedTeamsText.length === 0) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        member: "Please select a Team first",
+      }));
+      return;
+    }
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      member: "",
+    }));
+    setMemberModalVisible(true);
+  };
+
   const closeStageModal = () => setStageModalVisible(false);
   const openStageModal = () => setStageModalVisible(true);
 
@@ -302,7 +319,7 @@ const AddLeadManual = () => {
 
   const validateForm = () => {
     let isValid = true;
-    let newErrors = { name: "", email: "", phone: "" };
+    let newErrors = { name: "", email: "", phone: "", member: "" };
 
     if (!leadDetails.name.trim()) {
       newErrors.name = "Please enter name";
@@ -321,6 +338,8 @@ const AddLeadManual = () => {
     } else if (!/^\d{10}$/.test(leadDetails.phone)) {
       newErrors.phone = "Please enter a valid 10-digit phone number";
       isValid = false;
+    } else if (!leadDetails.member) {
+      newErrors.member = "Please  Select the Teams";
     }
 
     setErrors(newErrors);
@@ -521,6 +540,10 @@ const AddLeadManual = () => {
                 }
               />
             </TouchableOpacity>
+            {errors.member ? (
+              <Text style={{ color: "red" }}>{errors.member}</Text>
+            ) : null}
+
             <Text
               style={[
                 styles.label,
@@ -700,6 +723,8 @@ const AddLeadManual = () => {
                     onPress={() =>
                       toggleCheckbox(team._id, team.team_name, true)
                     }
+                    color="#3F8CFF"
+                    uncheckedColor="#A0A0A0"
                   />
                   <Text
                     onPress={() =>
@@ -728,6 +753,8 @@ const AddLeadManual = () => {
                         onPress={() =>
                           toggleCheckbox(subTeam._id, subTeam.team_name)
                         }
+                        color="#3F8CFF"
+                        uncheckedColor="#A0A0A0"
                       />
                     </View>
                     <Text
@@ -764,6 +791,8 @@ const AddLeadManual = () => {
                   <View style={{ transform: [{ scale: 0.8 }] }}>
                     <Checkbox
                       status={member.selected ? "checked" : "unchecked"}
+                      color="#3F8CFF"
+                      uncheckedColor="#A0A0A0"
                     />
                   </View>
                   <Text style={{ marginLeft: 10, fontSize: 16 }}>
@@ -864,7 +893,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontSize: 16,
     height: 40,
-    backgroundColor : "#f5f5f5"
+    backgroundColor: "#f5f5f5",
   },
   button: {
     backgroundColor: "#007BFF",

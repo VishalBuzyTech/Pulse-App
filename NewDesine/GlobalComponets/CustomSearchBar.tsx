@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TextInput, StyleSheet } from "react-native";
+import { View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 
 interface CustomSearchBarProps {
@@ -26,13 +26,17 @@ const CustomSearchBar: React.FC<CustomSearchBarProps> = ({
           value={value}
           onChangeText={onChangeText}
         />
-        <Feather
-          name="sliders"
-          size={20}
-          color="#000"
-          style={styles.filterIcon}
+        <TouchableOpacity
           onPress={onFilterPress}
-        />
+          hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+        >
+          <Feather
+            name="sliders"
+            size={20}
+            color="#000"
+            style={styles.filterIcon}
+          />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -49,8 +53,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 15,
     paddingVertical: 10,
-    borderBottomWidth :1,
-    borderTopWidth:1,
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
     borderColor: "#ddd",
   },
   icon: {

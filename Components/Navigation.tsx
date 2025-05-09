@@ -20,6 +20,7 @@ import TeamLead from "./Screens/TeamLead";
 import AllLeadScreen from "./Screens/AllLeadScreen";
 import AddLeadManual from "./Screens/AddLeadManual";
 import NotificationsScreen from "./Screens/NotificationsScreen";
+import CustomHeader from "../Global/Components/CustomHeader";
 
 const Stack = createNativeStackNavigator();
 
@@ -59,31 +60,16 @@ const Navigation: React.FC = () => {
               component={Dashboard}
               options={{ headerShown: false }}
             />
+
             <Stack.Screen
               name="Leads"
               component={Leads}
               options={{
-                headerTitle: () => (
-                  <Text
-                    style={{
-                      marginLeft: -20,
-                      fontSize: 20,
-                      fontWeight: "bold",
-                    }}
-                    allowFontScaling={false}
-                  >
-                   My Lead
-                  </Text>
-                ),
-                headerStyle: {
-                  backgroundColor: "#FFFFFF",
-                  ...({} as any),
-                },
-                headerShadowVisible: false,
+                header: () => <CustomHeader title="My Lead" />,
               }}
             />
 
-<Stack.Screen
+            <Stack.Screen
               name="TeamLead"
               component={TeamLead}
               options={{
@@ -96,7 +82,7 @@ const Navigation: React.FC = () => {
                     }}
                     allowFontScaling={false}
                   >
-                   Team Lead
+                    Team Lead
                   </Text>
                 ),
                 headerStyle: {
@@ -106,145 +92,52 @@ const Navigation: React.FC = () => {
                 headerShadowVisible: false,
               }}
             />
+
             <Stack.Screen
               name="AllLeadScreen"
               component={AllLeadScreen}
               options={{
-                headerTitle: () => (
-                  <Text
-                    style={{
-                      marginLeft: -20,
-                      fontSize: 20,
-                      fontWeight: "bold",
-                    }}
-                    allowFontScaling={false}
-                  >
-                 All Lead
-                  </Text>
-                ),
-                headerStyle: {
-                  backgroundColor: "#FFFFFF",
-                  ...({} as any),
-                },
-                headerShadowVisible: false,
+                header: () => <CustomHeader title="All Lead" />,
               }}
             />
 
-<Stack.Screen
+            <Stack.Screen
               name="AddLeadManual"
               component={AddLeadManual}
               options={{
-                headerTitle: () => (
-                  <Text
-                    style={{
-                      marginLeft: -20,
-                      fontSize: 20,
-                      fontWeight: "bold",
-                    }}
-                    allowFontScaling={false}
-                  >
-                 Add Leads
-                  </Text>
-                ),
-                headerStyle: {
-                  backgroundColor: "#FFFFFF",
-                  ...({} as any),
-                },
-                headerShadowVisible: false,
+                header: () => <CustomHeader title="Add Leads" />,
               }}
             />
+
             <Stack.Screen
               name="MyProfile"
               component={MyProfile}
               options={{
-                headerTitle: () => (
-                  <Text
-                    style={{
-                      marginLeft: -20,
-                      fontSize: 20,
-                      fontWeight: "bold",
-                    }}
-                    allowFontScaling={false}
-                  >
-                    My Profile
-                  </Text>
-                ),
-                headerStyle: {
-                  backgroundColor: "white",
-                  ...({} as any),
-                },
-                headerShadowVisible: false,
+                header: () => <CustomHeader title="My Profile" />,
               }}
             />
+
             <Stack.Screen
               name="AllTeamList"
               component={AllTeamList}
               options={{
-                headerTitle: () => (
-                  <Text
-                    style={{
-                      marginLeft: -20,
-                      fontSize: 20,
-                      fontWeight: "bold",
-                    }}
-                    allowFontScaling={false}
-                  >
-                    Teams
-                  </Text>
-                ),
-                headerStyle: {
-                  backgroundColor: "white",
-                  ...({} as any),
-                },
-                headerShadowVisible: false,
+                header: () => <CustomHeader title="Teams" />,
               }}
             />
+
             <Stack.Screen
               name="LeadInfoScreen"
               component={LeadInfoScreen}
               options={{
-                // title : "Lead Info Screen",
-                headerTitle: () => (
-                  <Text
-                    style={{
-                      marginLeft: -20,
-                      fontSize: 20,
-                      fontWeight: "bold",
-                    }}
-                    allowFontScaling={false}
-                  >
-                    Lead Info
-                  </Text>
-                ),
-                headerStyle: {
-                  backgroundColor: "white",
-                  ...({} as any),
-                },
-                headerShadowVisible: false,
+                header: () => <CustomHeader title="Lead Info" />,
               }}
             />
 
-<Stack.Screen
+            <Stack.Screen
               name="NotificationsScreen"
               component={NotificationsScreen}
               options={{
-                headerTitle: () => (
-                  <Text
-                    style={{
-                      marginLeft: -20,
-                      fontSize: 20,
-                      fontWeight: "bold",
-                    }}
-                    allowFontScaling={false}
-                  >
-                    Notifcations
-                  </Text>
-                ),
-                headerStyle: {
-                  backgroundColor: "white",
-                  ...({} as any),
-                },
-                headerShadowVisible: false,
+                header: () => <CustomHeader title="Notifcations" />,
               }}
             />
             <Stack.Screen
@@ -298,7 +191,7 @@ const Navigation: React.FC = () => {
           </>
         )}
 
-{/* <Stack.Screen
+        {/* <Stack.Screen
               name="Login"
               component={LoginScreen}
               options={{ headerShown: false }}

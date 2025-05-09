@@ -26,9 +26,7 @@ const ImageSourceModal = ({
   mode = "modal",
 }) => {
   const [isBottomSheet, setIsBottomSheet] = useState(mode === "bottomSheet");
-
   const translateY = useSharedValue(screenHeight); 
-
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: translateY.value }],
   }));
@@ -95,6 +93,7 @@ const ImageSourceModal = ({
             <TouchableOpacity onPress={onClose} style={styles.closeIcon}>
               <Icon name="close" size={24} color="#fff" />
             </TouchableOpacity>
+            <View style={styles.centerLine} />
             <View style={styles.iconRow}>
               <TouchableOpacity style={styles.iconButton} onPress={handleCamera}>
                 <FontAwesome name="camera" size={30} color="black" />
@@ -125,10 +124,14 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center",
   },
+  centerLine: {
+    height: 3,         
+    backgroundColor: 'black',
+    width: '25%',      
+  },
   modalContainer: {
     backgroundColor: "white",
     padding: 20,
-    borderRadius: 10,
     width: 250,
     alignItems: "center",
   },
@@ -136,15 +139,15 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
-    height: 200,
+    height: "25%",
     width: "100%",
-    paddingBottom: 20,
+  
   },
   iconRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
-    marginBottom: 20,
+    margin: 10,
   },
   iconButton: {
     width: "100%",

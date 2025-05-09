@@ -29,11 +29,14 @@ import { globalStyles } from "../../GlobalCss/GlobalStyles";
 import { getPerosnalOffice } from "./DashboardService";
 import { PermissionsAndroid, Platform } from "react-native";
 import ImageSourceModal from "../../Global/PopAndModels/ImageSourceModal";
+import * as ImageManipulator from 'expo-image-manipulator';
 
 const ProfileScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState(null);
+  console.log(userData,'userDatauserDatauserDatauserDatauserDatauserDatauserDatauserData');
+  
   const [userRole, setUserRole] = useState<any>();
   const [isModalVisible, setModalVisibleC] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
@@ -82,7 +85,7 @@ const ProfileScreen = ({ navigation }) => {
   };
 
   const handleImageSelect = async (uri, source) => {
-    console.log(`Image selected from ${source}:`, uri);
+    console.log(`Image selected from ${source}::::::::::::::::::::::::::::`, uri);
     setModalVisibleC(false);
     const hasPermission = await requestGalleryPermission();
     if (!hasPermission) return;
@@ -93,48 +96,62 @@ const ProfileScreen = ({ navigation }) => {
     }
   
     try {
-      console.log("Selected image URI:", uri);
+      console.log("Selected image URI:::::::::::::::::::::::::::::::::::::", uri);
       setUserData((prev) => ({
         ...prev,
         profile_image: uri,
       }));
+      const manipulatedImage = await ImageManipulator.manipulateAsync(
+        uri,
+        [],
+        { compress: 1, format: ImageManipulator.SaveFormat.WEBP }
+      );
   
-      const fileName = `profile_${Date.now()}.jpg`;
-      const response = await fetch(uri);
-      const blob = await response.blob();
-      console.log(blob.type);
-      
+      console.log("Manipulated image URI:::::::::::::::::::::::::::::::::::::::::", manipulatedImage.uri);
   
+      const fileName = `profile_${Date.now()}.webp`;
+      const response = await fetch(manipulatedImage.uri);
+      console.log(response,'responseresponseresponseresponseresponseresponseresponse:::::::::::::::::');
       const formData = new FormData();
-      formData.append("file", blob, fileName);
-      console.log(formData,'formDataformDataformDataformData');
+      const imageBlob = await response.blob(); 
+      const blobDetails = {
+        size: imageBlob.size,  
+        type: imageBlob.type  
+      };
+      formData.append("file",imageBlob, fileName);
+      console.log(imageBlob,'imageBlobimageBlobimageBlobimageBlob::::::::::::::::::::::::::::::::::::');
       
+      console.log(blobDetails, 'Blob Details::::::::::::::::::::::::::::::::::::::::::');
+      
+      console.log(formData,'formData::::::::::::::::::::::::::::::::::');
   
       const uploadResponse = await ImageUpLoad(formData);
-      console.log("Upload response:", uploadResponse);
+      console.log("Upload response::::::::::::::::::::::::::", uploadResponse);
   
       const updatedUserData = {
         ...userData,
         profile_image: uploadResponse.imageUrl,
-        leadName: userData.leadName,
+        name: userData.name,
         formId: userData.formId,
-        dynamicFields: userData.tempList,
-        leadEmail: userData.leadEmail,
-        leadPhone: userData.leadPhone,
+        email: userData.email,
+        phone: userData.phone,
         AssignTo: userData.assignTo?.AssignTo || "NA",
         stage: userData.stage?.stage || "NA",
         id: userData._id,
       };
+      console.log(updatedUserData,'updatedUserDataupdatedUserDataupdatedUserData');
+      
   
       const update = await updatePersonalDetail(updatedUserData);
       console.log("Update response:", update);
   
-      setProfileImage(uri);
+      setProfileImage(uploadResponse.imageUrl); 
   
     } catch (error) {
       console.error("Error while picking image:", error);
     }
   };
+  
   
 
   const logout = () => {

@@ -64,7 +64,6 @@ const FilterBottomSheet: React.FC<{
   const [selectedFilterForm, setselectedFilterForm] = useState<string[]>(
     selectedFormdataFilter
   );
-  console.log(selectedStages,selectedFilterForm,"selecteddddddddddddddddddddddddd")
   const dispatch = useDispatch();
   const [userType, setUserType] = useState<string>("0");
   const { selectedStagesAll, selectedFormFiltersAll } = useSelector(
@@ -245,7 +244,7 @@ const FilterBottomSheet: React.FC<{
   
     setSelectedFilters(allSelectedFilters);
   
-    // ✅ Update only the relevant state depending on the active tab
+
     if (selectedCategory === "form") {
       setselectedFilterForm(updatedTabFilters);
     } else if (selectedCategory === "Stage") {
@@ -344,16 +343,16 @@ const FilterBottomSheet: React.FC<{
     const hasForm = selectedFilterForm?.length > 0;
     const hasStage = selectedStages?.length > 0;
   
-    // If both have values, include both (user selected both types)
+    
     if (hasForm && hasStage) {
       formId = selectedFilterForm.join(",");
       stage = selectedStages.join(",");
     }
-    // If only form tab is active, use only form data
+
     else if (isFormTab && hasForm) {
       formId = selectedFilterForm.join(",");
     }
-    // If only stage tab is active, use only stage data
+ 
     else if (isStageTab && hasStage) {
       stage = selectedStages.join(",");
     }
@@ -695,6 +694,7 @@ const styles = StyleSheet.create({
     width: "65%",
     padding: 10,
     height: screenHeight - 80,
+    paddingBottom:30
   },
   checkboxRow: {
     flexDirection: "row",
@@ -715,7 +715,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderTopWidth: 1,
     borderTopColor: "#ddd",
-    height: 60,
+    height: 75,
     paddingHorizontal: 20,
   },
   searchContainer: {
