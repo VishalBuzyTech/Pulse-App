@@ -634,8 +634,8 @@ function Leads() {
                       status={item?.stage ?? ""}
                       form_name={item?.form_name ?? ""}
                       dateTimeShow={item?.createdAt ?? ""}
-                      priority={item?.priority ?? ""}
-                      reminder={remider[item._id] ?? "No Reminder"}
+                      priority={item?.priority ?? 0}
+                      reminder={remider[item._id]}
                       onCallPress={() => handleDialPress(item?.leadPhone)}
                       onMorePress={() => console.log("More Options Pressed")}
                       onTextPress={() => handleCardDataLeads(item)}

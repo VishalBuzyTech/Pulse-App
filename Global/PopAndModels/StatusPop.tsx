@@ -135,15 +135,15 @@ const StatusPop: React.FC<StatusPopProps> = ({
       const teamRoleName = response.data.teamRoleName.toLowerCase();
       let filteredStageData;
 
-      if (teamRoleName.includes("presales")) {
-        filteredStageData = filterStagesByIsSale(resData.data, 0);
-        setUserType("0");
-      } else if (teamRoleName.includes("sales")) {
-        filteredStageData = filterStagesByIsSale(resData.data, 1);
-        setUserType("1");
-      } else {
+      // if (teamRoleName.includes("presales")) {
+      //   filteredStageData = filterStagesByIsSale(resData.data, 0);
+      //   setUserType("0");
+      // } else if (teamRoleName.includes("sales")) {
+      //   filteredStageData = filterStagesByIsSale(resData.data, 1);
+      //   setUserType("1");
+      // } else {
         filteredStageData = resData.data;
-      }
+      // }
 
       setDropdownData(filteredStageData);
     } catch (error) {

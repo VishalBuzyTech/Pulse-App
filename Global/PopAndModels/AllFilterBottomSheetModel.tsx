@@ -167,15 +167,15 @@ const FilterBottomSheet: React.FC<{
         const response = await getOfficeDetails(userData);
         const teamRoleName = response.data.teamRoleName.toLowerCase();
         let filteredStageData;
-        if (teamRoleName.includes("presales")) {
-          filteredStageData = filterStagesByIsSale(stageData.data, 0);
-          setUserType("0");
-        } else if (teamRoleName.includes("sales")) {
-          filteredStageData = filterStagesByIsSale(stageData.data, 1);
-          setUserType("1");
-        } else {
+        // if (teamRoleName.includes("presales")) {
+        //   filteredStageData = filterStagesByIsSale(stageData.data, 0);
+        //   setUserType("0");
+        // } else if (teamRoleName.includes("sales")) {
+        //   filteredStageData = filterStagesByIsSale(stageData.data, 1);
+        //   setUserType("1");
+        // } else {
           filteredStageData = stageData.data;
-        }
+        // }
         setAllData(filteredStageData);
       } else if (selectedCategory === "form") {
         const formData = await getAllForms(payload);
