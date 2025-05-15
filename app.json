@@ -6,6 +6,7 @@
         "READ_PHONE_STATE",
         "CALL_PHONE"
       ],
+       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "",
         "backgroundColor": "#ffffff"

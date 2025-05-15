@@ -16,7 +16,6 @@ const CustomModal: React.FC<CustomModalProps> = ({ isVisible, onClose, children 
             console.log("Close Button Pressed");
             onClose();
           }}>
-          {/* <Text style={styles.closeText}>✖</Text> */}
         </TouchableOpacity>
         {children}
       </View>

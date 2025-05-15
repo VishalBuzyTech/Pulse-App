@@ -502,9 +502,9 @@ const Dashboard: React.FC<CustomProps> = () => {
     navigation.navigate("AllLeadScreen", { selectedView: 1 });
   };
 
-  const handleProfile = () => {
-    navigation.navigate("MyProfile");
-  };
+  // const handleProfile = () => {
+  //   navigation.navigate("MyProfile");
+  // };
 
   const navigateToTeams = (selectedTeam: any) => {
     navigation.navigate("AllTeamList", { allTeams: selectedTeam });
@@ -1397,7 +1397,7 @@ const Dashboard: React.FC<CustomProps> = () => {
       )}
       {isFooterVisible && (
         // <Footer navigate={handleProfile} onHomePress={onRefresh} />
-        <FotterDseine navigate={handleProfile} onHomePress={onRefresh} />
+        <FotterDseine  onHomePress={onRefresh} />
       )}
     </>
   );

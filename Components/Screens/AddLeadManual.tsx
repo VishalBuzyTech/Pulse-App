@@ -7,12 +7,11 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
+
 import { globalStyles } from "../../GlobalCss/GlobalStyles";
 import {
   getAllForms,
   getAllSource,
-  getAllTeamLeads,
   getTeamList,
 } from "./DashboardService";
 import {
@@ -21,12 +20,14 @@ import {
   getStage,
 } from "./LeadInfoScreenService";
 import store from "../../utils/store";
-import CustomModal from "../../Global/PopAndModels/CustomModel";
-import { Checkbox } from "react-native-paper";
 import { registerEmployee } from "./AllTeamListService";
 import { useNavigation } from "@react-navigation/native";
 import { LoginScreenNavigationProp } from "../type";
 import { Dropdown } from "react-native-element-dropdown";
+import TeamSelection from "../../Global/Components/TeamSelection";
+import TeamMemberShow from "../../Global/Components/TeamMemberShow";
+import TeamStatus from "../../Global/Components/TeamStatus";
+
 const AddLeadManual = () => {
   const navigation = useNavigation<LoginScreenNavigationProp>();
   const [selectedForm, setSelectedForm] = useState("");
@@ -214,89 +215,77 @@ const AddLeadManual = () => {
     } catch (error) {}
   };
 
+  const toggleCheckbox = (id: string, teamName: string) => {
+    setCheckedTeams((prevCheckedTeams) => {
+      const newCheckedTeams = {
+        ...prevCheckedTeams,
+        [id]: !prevCheckedTeams[id], 
+      };
+      const updatedSelectedTeams = Object.keys(newCheckedTeams)
+        .filter((teamId) => newCheckedTeams[teamId]) 
+        .map((teamId) => teamName); 
+ 
+      setSelectedTeamsText(updatedSelectedTeams); 
+ 
+      return newCheckedTeams;
+
+    });
+  };
+
   // const toggleCheckbox = (teamId, teamName, isParent = false) => {
   //   setCheckedTeams((prev) => {
   //     let updatedCheckedTeams = { ...prev };
-  //     updatedCheckedTeams[teamId] = !updatedCheckedTeams[teamId];
-  //     const selectedTeams = teams
+
+  //     const toggleTeam = (id, value) => {
+  //       updatedCheckedTeams[id] = value;
+  //     };
+
+  //     if (isParent) {
+  //       const parentTeam = teams.find((team) => team._id === teamId);
+  //       const newState = !updatedCheckedTeams[teamId];
+  //       toggleTeam(teamId, newState);
+
+  //       if (parentTeam && parentTeam.sub_teams) {
+  //         parentTeam.sub_teams.forEach((subTeam) => {
+  //           toggleTeam(subTeam._id, newState);
+  //         });
+  //       }
+  //     } else {
+  //       const newState = !updatedCheckedTeams[teamId];
+  //       toggleTeam(teamId, newState);
+  //       const parentTeam = teams.find((team) =>
+  //         team.sub_teams?.some((subTeam) => subTeam._id === teamId)
+  //       );
+
+  //       if (parentTeam) {
+  //         const allChildrenChecked = parentTeam.sub_teams.every(
+  //           (subTeam) => updatedCheckedTeams[subTeam._id]
+  //         );
+  //         toggleTeam(parentTeam._id, allChildrenChecked);
+  //       }
+  //     }
+  //     const selectedTeamsData = teams
   //       .flatMap((team) => [team, ...(team.sub_teams || [])])
-  //       .filter((team) => updatedCheckedTeams[team._id]);
-  //     const selectedNames = selectedTeams
-  //       .map((team) => team.team_name)
-  //       .join(", ");
-  //     setSelectedTeamsText(selectedNames);
-  //     const selectedMembers = selectedTeams.flatMap((team) => {
-  //       const matchingTeam = teamMemberAssine.find((t) => t.id === team._id);
+  //       .filter((team) => updatedCheckedTeams[team._id])
+  //       .map((team) => ({
+  //         id: team._id,
+  //         name: team.team_name,
+  //       }));
+
+  //     setSelectedTeamsText(selectedTeamsData);
+
+  //     const selectedMembers = selectedTeamsData.flatMap((team) => {
+  //       const matchingTeam = teamMemberAssine.find((t) => t.id === team.id);
   //       return matchingTeam && matchingTeam.teamMembers
   //         ? matchingTeam.teamMembers
   //         : [];
   //     });
 
-  //     if (selectedMembers.length > 0) {
-  //       console.log(selectedMembers, "Filtered Team Members");
-  //       setFilteredMembers(selectedMembers);
-  //     } else {
-  //       console.log("No Team Members found for selected teams.");
-  //       setFilteredMembers([]);
-  //     }
+  //     setFilteredMembers(selectedMembers.length > 0 ? selectedMembers : []);
+
   //     return updatedCheckedTeams;
   //   });
   // };
-
-  const toggleCheckbox = (teamId, teamName, isParent = false) => {
-    setCheckedTeams((prev) => {
-      let updatedCheckedTeams = { ...prev };
-
-      const toggleTeam = (id, value) => {
-        updatedCheckedTeams[id] = value;
-      };
-
-      if (isParent) {
-        const parentTeam = teams.find((team) => team._id === teamId);
-        const newState = !updatedCheckedTeams[teamId];
-        toggleTeam(teamId, newState);
-
-        if (parentTeam && parentTeam.sub_teams) {
-          parentTeam.sub_teams.forEach((subTeam) => {
-            toggleTeam(subTeam._id, newState);
-          });
-        }
-      } else {
-        const newState = !updatedCheckedTeams[teamId];
-        toggleTeam(teamId, newState);
-        const parentTeam = teams.find((team) =>
-          team.sub_teams?.some((subTeam) => subTeam._id === teamId)
-        );
-
-        if (parentTeam) {
-          const allChildrenChecked = parentTeam.sub_teams.every(
-            (subTeam) => updatedCheckedTeams[subTeam._id]
-          );
-          toggleTeam(parentTeam._id, allChildrenChecked);
-        }
-      }
-      const selectedTeamsData = teams
-        .flatMap((team) => [team, ...(team.sub_teams || [])])
-        .filter((team) => updatedCheckedTeams[team._id])
-        .map((team) => ({
-          id: team._id,
-          name: team.team_name,
-        }));
-
-      setSelectedTeamsText(selectedTeamsData);
-
-      const selectedMembers = selectedTeamsData.flatMap((team) => {
-        const matchingTeam = teamMemberAssine.find((t) => t.id === team.id);
-        return matchingTeam && matchingTeam.teamMembers
-          ? matchingTeam.teamMembers
-          : [];
-      });
-
-      setFilteredMembers(selectedMembers.length > 0 ? selectedMembers : []);
-
-      return updatedCheckedTeams;
-    });
-  };
 
   const toggleMemberSelection = (id) => {
     setFilteredMembers((prevMembers) => {
@@ -400,18 +389,6 @@ const AddLeadManual = () => {
         >
           Select Form
         </Text>
-        {/* <View style={styles.pickerContainer}>
-          <Picker selectedValue={selectedForm} onValueChange={handleFormChange}>
-            <Picker.Item label="Select a form" value="" />
-            {allForms.map((form, index) => (
-              <Picker.Item
-                key={index}
-                label={form.form_name}
-                value={form._id}
-              />
-            ))}
-          </Picker>
-        </View> */}
 
         <View style={styles.containerForm}>
           <Dropdown
@@ -511,7 +488,7 @@ const AddLeadManual = () => {
                 editable={false}
                 value={
                   selectedTeamsText.length > 0
-                    ? selectedTeamsText.map((team) => team.name).join(", ")
+                    ? selectedTeamsText.join(", ")
                     : ""
                 }
               />
@@ -662,24 +639,6 @@ const AddLeadManual = () => {
             >
               Select Source
             </Text>
-            {/* <View style={styles.pickerContainer}>
-              <Picker
-                selectedValue={leadDetails.source}
-                onValueChange={(itemValue) =>
-                  setLeadDetails((prev) => ({ ...prev, source: itemValue }))
-                }
-              >
-                <Picker.Item label="Select a source" value="" />
-                {allSourceType.map((source) => (
-                  <Picker.Item
-                    key={source._id}
-                    label={source.source_name}
-                    value={source.source_name}
-                  />
-                ))}
-              </Picker>
-            </View> */}
-
             <View style={styles.containerForm}>
               <Dropdown
                 itemContainerStyle={{
@@ -706,156 +665,27 @@ const AddLeadManual = () => {
           </>
         )}
       </ScrollView>
-      <CustomModal isVisible={modalVisible} onClose={closeModal}>
-        <View style={{ padding: 10, maxHeight: 500 }}>
-          <ScrollView>
-            {teams.map((team) => (
-              <View key={team._id} style={{ marginBottom: 10 }}>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginBottom: 3,
-                  }}
-                >
-                  <Checkbox
-                    status={checkedTeams[team._id] ? "checked" : "unchecked"}
-                    onPress={() =>
-                      toggleCheckbox(team._id, team.team_name, true)
-                    }
-                    color="#3F8CFF"
-                    uncheckedColor="#A0A0A0"
-                  />
-                  <Text
-                    onPress={() =>
-                      toggleCheckbox(team._id, team.team_name, true)
-                    }
-                    style={{ marginLeft: 5 }}
-                  >
-                    {team.team_name}
-                  </Text>
-                </View>
+      <TeamSelection
+        visible={modalVisible}
+        onClose={closeModal}
+        teams={teams}
+        checkedTeams={checkedTeams}
+        toggleCheckbox={toggleCheckbox}
+      />
 
-                {team.sub_teams.map((subTeam) => (
-                  <View
-                    key={subTeam._id}
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      paddingLeft: 20,
-                    }}
-                  >
-                    <View style={{ transform: [{ scale: 0.7 }] }}>
-                      <Checkbox
-                        status={
-                          checkedTeams[subTeam._id] ? "checked" : "unchecked"
-                        }
-                        onPress={() =>
-                          toggleCheckbox(subTeam._id, subTeam.team_name)
-                        }
-                        color="#3F8CFF"
-                        uncheckedColor="#A0A0A0"
-                      />
-                    </View>
-                    <Text
-                      onPress={() =>
-                        toggleCheckbox(subTeam._id, subTeam.team_name)
-                      }
-                      style={{ marginLeft: 5 }}
-                    >
-                      {subTeam.team_name}
-                    </Text>
-                  </View>
-                ))}
-              </View>
-            ))}
-          </ScrollView>
-        </View>
-      </CustomModal>
+      <TeamMemberShow
+        visible={memberModalVisible}
+        onClose={closeMemberModal}
+        members={filteredMembers}
+        toggleMemberSelection={toggleMemberSelection}
+      />
 
-      <CustomModal isVisible={memberModalVisible} onClose={closeMemberModal}>
-        <View style={{ padding: 10, maxHeight: 500 }}>
-          <ScrollView>
-            {filteredMembers?.map((member) => (
-              <TouchableOpacity
-                key={member.id}
-                onPress={() => toggleMemberSelection(member.id)}
-              >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginBottom: 10,
-                  }}
-                >
-                  <View style={{ transform: [{ scale: 0.8 }] }}>
-                    <Checkbox
-                      status={member.selected ? "checked" : "unchecked"}
-                      color="#3F8CFF"
-                      uncheckedColor="#A0A0A0"
-                    />
-                  </View>
-                  <Text style={{ marginLeft: 10, fontSize: 16 }}>
-                    {member.label}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-      </CustomModal>
-
-      <CustomModal isVisible={stageModalVisible} onClose={closeStageModal}>
-        <View style={{ padding: 10, maxHeight: 500 }}>
-          <ScrollView>
-            {allStageData?.map((stage) => (
-              <View key={stage._id} style={{ marginBottom: 10 }}>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginBottom: 3,
-                  }}
-                >
-                  <Text
-                    style={[globalStyles.h7, globalStyles.fs1, globalStyles.tc]}
-                    allowFontScaling={false}
-                  >
-                    {stage.stage_Name}
-                  </Text>
-                </View>
-                {stage.sub_Stage_name?.map((subStage) => (
-                  <View
-                    key={subStage._id}
-                    style={{
-                      flexDirection: "row",
-                      paddingLeft: 20,
-                      paddingVertical: 5,
-                    }}
-                  >
-                    <TouchableOpacity
-                      key={subStage._id}
-                      onPress={() => handleSubStageSelect(subStage.stage_Name)}
-                    >
-                      <Text
-                        style={[
-                          globalStyles.h8,
-                          globalStyles.fs3,
-                          globalStyles.tc,
-                          { paddingVertical: 4, paddingHorizontal: 8 },
-                        ]}
-                        allowFontScaling={false}
-                      >
-                        {subStage.stage_Name}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                ))}
-              </View>
-            ))}
-          </ScrollView>
-        </View>
-      </CustomModal>
+      <TeamStatus
+        visible={stageModalVisible}
+        onClose={closeStageModal}
+        allStageData={allStageData}
+        handleSubStageSelect={handleSubStageSelect}
+      />
     </View>
   );
 };

@@ -54,11 +54,11 @@ const BottomSheetModal: React.FC<BottomSheetModalProps> = ({
 
   const navigation = useNavigation<LoginScreenNavigationProp>();
 
-  const handleCardPress = (id: number) => {
-    if (id === 1) {
-      navigation.navigate("AddLeadManual");
-    }
-  };
+  // const handleCardPress = (id: number) => {
+  //   if (id === 1) {
+  //     navigation.navigate("AddLeadManual");
+  //   }
+  // };
 
   return visible ? (
     <TouchableWithoutFeedback onPress={onClose}>
@@ -71,7 +71,7 @@ const BottomSheetModal: React.FC<BottomSheetModalProps> = ({
                 <TouchableOpacity
                   key={item.id}
                   style={[styles.card, item.color]}
-                  onPress={() => handleCardPress(item.id)}
+                  // onPress={() => handleCardPress(item.id)}
                   activeOpacity={0.7}
                 >
                   <Image source={item.image} style={styles.image} />

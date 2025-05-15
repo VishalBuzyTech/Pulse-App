@@ -14,7 +14,7 @@ import BottomSheetModal from "../../Global/PopAndModels/BottomSheetModal";
 import { useNavigation } from "@react-navigation/native";
 import { LoginScreenNavigationProp } from "../../Components/type";
 
-const FotterDseine = ({ navigate, onHomePress }) => {
+const FotterDseine = ({onHomePress }) => {
     const navigation = useNavigation<LoginScreenNavigationProp>();
   const [userData, setUserData] = useState<any>(null);
   const [selectedIcon, setSelectedIcon] = useState(null);
@@ -33,19 +33,37 @@ const FotterDseine = ({ navigate, onHomePress }) => {
     }
   };
 
+  // const handleIconPress = (iconName) => {
+  //   if (iconName === "home") {
+  //     onHomePress();
+  //   }
+  //   setSelectedIcon(iconName);
+  //   if (iconName === "user") {
+  //     navigate("UserProfile");
+  //   }
+  //   if (iconName === "pluscircle") {
+  //     // setIsVisible(true);
+  //     navigation.navigate("AddLeadManual");
+  //   }
+  // };
+
   const handleIconPress = (iconName) => {
-    if (iconName === "home") {
+  setSelectedIcon(iconName);
+
+  switch (iconName) {
+    case "home":
       onHomePress();
-    }
-    setSelectedIcon(iconName);
-    if (iconName === "user") {
-      navigate("UserProfile");
-    }
-    if (iconName === "pluscircle") {
-      // setIsVisible(true);
+      break;
+    case "user":
+      navigation.navigate("MyProfile");
+      break;
+    case "pluscircle":
       navigation.navigate("AddLeadManual");
-    }
-  };
+      break;
+    default:
+      break;
+  }
+};
 
   return (
     <>
